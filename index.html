@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ronda PCI · MILSA</title>
+<meta name="theme-color" content="#00292b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ronda PCI">
+<style>
+:root{--top:#00292b;--fire:#c62828;--aid:#2e7d32;--alarm:#e65100;--ok:#2e7d32;--lim:#b26a00;--ink:#1d1d1f;--mut:#666;--line:#ddd;--bg:#f4f6f5;--card:#fff}
+*{box-sizing:border-box}html,body{margin:0}
+body{font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);padding-bottom:84px}
+header{background:var(--top);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center}
+header img{width:36px;height:36px;border-radius:9px}
+header .t{flex:1;min-width:0}header b{display:block;font-size:16px}header span{font-size:12px;opacity:.85}
+header button{font:inherit;font-size:13px;font-weight:600;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);border-radius:9px;padding:8px 10px}
+main{padding:12px 16px;max-width:640px;margin:0 auto}
+h2{font-size:19px;margin:8px 0 10px}h3{font-size:16px;margin:16px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin:0 0 10px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mut);margin-bottom:10px}
+input,select,textarea{font:inherit;padding:10px;border:1px solid #bbb;border-radius:8px;background:#fff;color:var(--ink);width:100%}
+select.bad{border-color:var(--fire);background:#fdecea}select.lim{border-color:var(--lim);background:#fff4e0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:inherit;font-weight:600;padding:12px 14px;border-radius:10px;border:1px solid #bbb;background:#fff;color:var(--ink);cursor:pointer;text-decoration:none}
+.btn.p{background:var(--fire);border-color:var(--fire);color:#fff}.btn.t{background:var(--top);border-color:var(--top);color:#fff}.btn.full{width:100%}.btn.sm{padding:8px 10px;font-size:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.grow{flex:1;min-width:0}
+.tabs{display:flex;gap:4px;margin:0 0 10px;position:sticky;top:calc(58px + env(safe-area-inset-top));z-index:4;background:var(--bg);padding:6px 0}
+.tabs button{flex:1;font:inherit;font-size:14px;padding:10px 4px;border:1px solid #bbb;border-radius:10px;background:#fff;color:var(--ink)}
+.tabs button[aria-pressed=true]{color:#fff;font-weight:600}.tabs button[data-tab=extintor][aria-pressed=true]{background:var(--fire);border-color:var(--fire)}.tabs button[data-tab=botiquin][aria-pressed=true]{background:var(--aid);border-color:var(--aid)}.tabs button[data-tab=pulsador][aria-pressed=true]{background:var(--alarm);border-color:var(--alarm)}
+.tabs small{display:block;font-size:11px;opacity:.85;font-weight:400}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.it{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;font:inherit;color:inherit}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}.dot.extintor{background:var(--fire)}.dot.botiquin{background:var(--aid)}.dot.pulsador{background:var(--alarm)}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}.note{font-size:13px;color:var(--mut)}
+.chip{font-size:12px;padding:3px 8px;border-radius:99px;background:#eee;white-space:nowrap;display:inline-block}.chip.ok{background:#e3f1e4;color:var(--ok)}.chip.nc{background:#fdecea;color:var(--fire)}.chip.sit{background:#fff3e0;color:var(--alarm)}
+.kpis{display:flex;gap:8px;margin-bottom:10px}.kpi{flex:1;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}.kpi span{font-size:12px;color:var(--mut)}.kpi b{display:block;font-size:20px}
+.ph{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.ph figure{position:relative;margin:0;width:96px}.ph img{width:96px;height:96px;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block}
+.ph figcaption{font-size:11px;color:var(--mut);line-height:1.2;margin-top:2px}
+.ph button{position:absolute;top:-6px;right:-6px;width:26px;height:26px;border-radius:50%;border:0;background:#333;color:#fff;font-size:14px}
+.def{display:flex;gap:6px;align-items:center;margin:-4px 0 10px;font-size:13px;color:var(--fire)}
+.plano{position:relative;overflow:auto;max-height:62vh;border:1px solid var(--line);border-radius:8px;background:#fff;touch-action:pan-x pan-y pinch-zoom}
+.plano .in{position:relative;width:220%}.plano img{display:block;width:100%}
+.mk{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;border:3px solid #fff;background:var(--fire);box-shadow:0 0 0 3px var(--fire);animation:pl 1.2s infinite;pointer-events:none}
+.mk.old{background:#999;box-shadow:0 0 0 3px #999;animation:none;opacity:.7}
+@keyframes pl{50%{box-shadow:0 0 0 9px rgba(198,40,40,.25)}}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;z-index:6}.bar .btn{flex:1}
+.hint{background:#fff7e0;border:1px solid #f0d58a;border-radius:10px;padding:10px 12px;font-size:14px;margin-bottom:10px}
+.hint.g{background:#e3f1e4;border-color:#a5d6a7}.hint.r{background:#fdecea;border-color:#f5b5b0}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;z-index:9;max-width:90vw}
+.firma{width:100%;height:160px;border:1px dashed #999;border-radius:8px;background:#fff;touch-action:none;display:block}
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:24px 8px}
+.hero img{width:120px;height:120px;border-radius:26px}
+</style></head><body>
+<header><img src="icon-192.png" alt=""><div class="t"><b>Ronda PCI · MILSA</b><span id="h-sub">Departamento de PRL</span></div><button id="h-datos" hidden>⟳ Datos</button></header>
+<main id="app"></main>
+<input type="file" id="f-datos" hidden>
+<script src="jspdf.umd.min.js"></script>
+<script>
+const PROG=1; // versión del programa
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hoy=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const fmt=s=>s?String(s).slice(0,10).split("-").reverse().join("/"):"";
+const hhmm=s=>{const d=new Date(s);return isNaN(d)?"":d.toLocaleString("es-ES",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})};
+const lsGet=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2800)}
+
+/* ---- IndexedDB: datos (inventario y planos) y lo hecho en la ronda ---- */
+let idb;function openDB(){return new Promise((ok,ko)=>{const r=indexedDB.open("pci-movil",1);r.onupgradeneeded=()=>{r.result.createObjectStore("items");r.result.createObjectStore("datos")};r.onsuccess=()=>{idb=r.result;ok()};r.onerror=()=>ko(r.error)})}
+const tx=(st,m,f)=>new Promise((ok,ko)=>{const t=idb.transaction(st,m);f(t.objectStore(st));t.oncomplete=()=>ok();t.onerror=()=>ko(t.error)});
+const getAll=st=>new Promise((ok,ko)=>{const out={};const c=idb.transaction(st).objectStore(st).openCursor();c.onsuccess=()=>{const x=c.result;if(x){out[x.key]=x.value;x.continue()}else ok(out)};c.onerror=()=>ko(c.error)});
+const dbPut=(k,v)=>tx("items","readwrite",s=>s.put(v,k)),dbDel=k=>tx("items","readwrite",s=>s.delete(k)),dbClear=()=>tx("items","readwrite",s=>s.clear());
+const datosPut=v=>tx("datos","readwrite",s=>s.put(v,"actual"));
+
+/* ---- estado ---- */
+let DATA=null;
+const TIPOS=[["extintor","Extintores"],["botiquin","Botiquines"],["pulsador","Pulsadores"]];
+const S={ronda:lsGet("pcim.ronda"),items:{},view:"lista",tab:lsGet("pcim.tab")||"extintor",eq:null,fPlano:lsGet("pcim.fplano")||"",soloPend:!!lsGet("pcim.pend"),scroll:{},enviado:lsGet("pcim.enviado")};
+const PER=[["T1","1º trimestre"],["T2","2º trimestre"],["T3","3º trimestre"],["T4","4º trimestre"]];
+const perAct=()=>"T"+(Math.floor(new Date().getMonth()/3)+1);
+const plano=id=>DATA.planos.find(p=>p.id===id);
+const todos=()=>[...DATA.equipos,...Object.entries(S.items).filter(([k,v])=>v.nuevo).map(([k,v])=>({id:k,...v.nuevo,nuevoEnRonda:true}))];
+const eqById=id=>todos().find(e=>e.id===id);
+const pos=e=>{const it=S.items[e.id];return it&&it.pos?it.pos:{planoId:e.planoId,x:e.x,y:e.y}};
+const eqsTipo=t=>{const o=id=>{const p=plano(id);return p?p.orden:99};return todos().filter(e=>e.tipo===t).sort((a,b)=>o(pos(a).planoId)-o(pos(b).planoId)||(a.orden??999)-(b.orden??999)||String(a.codigo).localeCompare(String(b.codigo)))};
+const esCO2=e=>/CO2|CO₂/i.test(e.agente||"");
+// Pulsadores: solo inspección visual; la prueba de funcionamiento es de la revisión anual de la mantenedora.
+const PUL=[["accesible","Accesible, visible y señalizado"],["tapa","Tapa / cristal intacto"]];
+const filaDef=e=>e.tipo==="extintor"?{senal:"SI",botella:"C",presion:esCO2(e)?"NA":"C",manguera:"C",noLoc:false,obs:"",fecha:""}
+  :e.tipo==="botiquin"?{senal:"C",estado:"C",contenido:"C",falta:"",cad:"",retirado:false,obs:"",fecha:""}
+  :{accesible:"C",tapa:"C",noLoc:false,obs:"",fecha:""};
+const revisado=it=>it&&it.fila&&it.guardado;
+const cargado=e=>!!(DATA.cargados||{})[e.id],comprobar=e=>(DATA.comprobar||{})[e.id]||"";
+const done=e=>revisado(S.items[e.id])||(cargado(e)&&!comprobar(e));
+const malo=f=>!!f&&(Object.entries(f).some(([k,v])=>v==="NC"||(k==="senal"&&v==="NO"))||f.noLoc||f.retirado);
+const sinEnviar=()=>Object.values(S.items).filter(v=>v.hora&&(!S.enviado||v.hora>S.enviado)).length;
+
+function cabecera(){$("#h-datos").hidden=!DATA;$("#h-sub").textContent=DATA?`v${PROG} · datos del ${DATA.fecha}`:`v${PROG} · Departamento de PRL`}
+function render(){cabecera();const a=$("#app");if(!DATA){a.innerHTML=vSinDatos();bSinDatos();return}
+  if(!S.ronda){a.innerHTML=vInicio();bInicio()}else if(S.view==="eq"){a.innerHTML=vEq();bEq()}else if(S.view==="enviar"){a.innerHTML=vEnviar();bEnviar()}else{a.innerHTML=vLista();bLista()}
+  window.scrollTo(0,S.view==="lista"?(S.scroll[S.tab]||0):0)}
+
+/* ---- datos ---- */
+function vSinDatos(){return`<div class="hero"><img src="icon-512.png" alt=""><h2>Ronda PCI</h2>
+<p class="note" style="max-width:34ch">Para empezar, carga el archivo de datos que te ha pasado PRL (<b>PCI-datos-movil…</b>). Se guarda en el móvil y después la app funciona sin cobertura.</p>
+<button class="btn t full" id="d-load" style="max-width:320px">Cargar archivo de datos</button>
+<p class="note" style="max-width:34ch">Si te llegó por WhatsApp: ábrelo en el chat, descárgalo y búscalo en Descargas o en «WhatsApp Documents».</p></div>`}
+function bSinDatos(){$("#d-load").onclick=()=>$("#f-datos").click()}
+$("#h-datos").onclick=()=>{if(confirm("¿Cargar un archivo de datos nuevo? Lo que llevas hecho en la ronda se conserva."))$("#f-datos").click()};
+$("#f-datos").onchange=async ev=>{const f=ev.target.files[0];ev.target.value="";if(!f)return;
+  let d;try{d=JSON.parse(await f.text())}catch(e){toast("Ese archivo no es un archivo de datos de la Ronda PCI.");return}
+  if(!d||d.formato!=="pci-datos-movil"||!Array.isArray(d.equipos)||!Array.isArray(d.planos)){toast("Ese archivo no es un archivo de datos de la Ronda PCI.");return}
+  if((d.programaMin||1)>PROG){alert(`Este archivo de datos necesita la versión ${d.programaMin} del programa y tienes la ${PROG}. Cierra la app y ábrela dos veces para que se actualice, y vuelve a cargarlo.`);return}
+  await datosPut(d);DATA=d;toast(`Datos del ${d.fecha} cargados: ${d.equipos.length} equipos.`);render()};
+
+/* ---- inicio ---- */
+function vInicio(){const u=DATA.ultimaRonda;return`<h2>Empezar la ronda</h2>
+<div class="hint">Extintores, botiquines y pulsadores en una sola ronda: cambias de uno a otro con las pestañas. Haz las fotos, marca la revisión y sitúa cada equipo en el plano. Todo se guarda en el móvil aunque cierres la app. Al terminar, <b>Enviar</b>.</div>
+${u?`<p class="note">Última ronda cargada en la app: ${esc(u)}.</p>`:""}
+<div class="card"><div class="grid"><label class="f">Periodo<select id="i-per">${PER.map(([p,x])=>`<option value="${p}" ${p===((DATA.ronda||{}).periodo||perAct())?"selected":""}>${x}</option>`).join("")}</select></label>
+<label class="f">Año<input id="i-anio" type="number" value="${esc((DATA.ronda||{}).anio||new Date().getFullYear())}"></label></div>
+<label class="f">Fecha<input id="i-fecha" type="date" value="${hoy()}"></label>
+<label class="f">Realizado por<input id="i-por" value="${esc(lsGet("pcim.tecnico")||"")}" placeholder="Nombre y apellidos"></label>
+<button class="btn p full" id="i-go">Empezar la ronda</button></div>
+<p class="note">${TIPOS.map(([t,x])=>`${DATA.equipos.filter(e=>e.tipo===t).length} ${x.toLowerCase()}`).join(" · ")} (extintores sin los de obra).</p>`}
+function bInicio(){$("#i-go").onclick=()=>{const por=$("#i-por").value.trim();if(!por){toast("Pon quién hace la revisión.");return}lsSet("pcim.tecnico",por);
+  S.ronda={periodo:$("#i-per").value,anio:$("#i-anio").value,fecha:$("#i-fecha").value||hoy(),realizadoPor:por,creado:new Date().toISOString()};lsSet("pcim.ronda",S.ronda);S.view="lista";render()}}
+
+/* ---- lista ---- */
+function chip(e){const it=S.items[e.id];const p=pos(e);const sit=!plano(p.planoId)||p.x==null;
+  let c=!revisado(it)&&comprobar(e)?`<span class="chip sit">Comprobar</span>`:!revisado(it)&&cargado(e)?`<span class="chip ok">Ya cargado ✓</span>`:revisado(it)?(malo(it.fila)?`<span class="chip nc">No conforme</span>`:`<span class="chip ok">Hecho${it.fotos.length?" · "+it.fotos.length+" 📷":""}</span>`):`<span class="chip">Pendiente</span>`;
+  if(sit)c+=` <span class="chip sit">Sin situar</span>`;else if(it&&it.pos)c+=` <span class="chip sit">📍 nuevo</span>`;return`<div style="text-align:right">${c}</div>`}
+function vLista(){const r=S.ronda,t=S.tab,eqs=eqsTipo(t),hechos=eqs.filter(e=>done(e)).length,nc=eqs.filter(e=>revisado(S.items[e.id])&&malo(S.items[e.id].fila)).length,se=sinEnviar();
+  const l=eqs.filter(e=>{const p=pos(e);return!S.fPlano||(S.fPlano==="_"?(!plano(p.planoId)||p.x==null):p.planoId===S.fPlano)}).filter(e=>!S.soloPend||!done(e));
+  return`<div class="tabs" role="group" aria-label="Tipo de equipo">${TIPOS.map(([k,x])=>{const q=eqsTipo(k);return`<button data-tab="${k}" aria-pressed="${t===k}">${x}<small>${q.filter(e=>done(e)).length}/${q.length}</small></button>`}).join("")}</div>
+  <div class="kpis"><div class="kpi"><span>Revisados</span><b>${hechos} / ${eqs.length}</b></div><div class="kpi"><span>No conformes</span><b style="color:${nc?"var(--fire)":"inherit"}">${nc}</b></div><div class="kpi"><span>${esc(PER.find(x=>x[0]===r.periodo)?.[1]||r.periodo)} ${esc(r.anio)}</span><b style="font-size:13px">${fmt(r.fecha)} · ${esc(r.realizadoPor)}</b></div></div>
+  ${t==="pulsador"?`<div class="hint">Pulsadores: solo inspección visual. La prueba de funcionamiento la hace la mantenedora en la revisión anual.</div>`:""}
+  <div class="row" style="margin-bottom:10px"><select id="l-pl" class="grow" style="width:auto"><option value="">Todos los planos</option>${DATA.planos.map(p=>`<option value="${p.id}" ${S.fPlano===p.id?"selected":""}>${esc(p.nombre)}</option>`).join("")}<option value="_" ${S.fPlano==="_"?"selected":""}>Sin situar</option></select>
+  <label class="row" style="gap:6px;font-size:14px"><input type="checkbox" id="l-sp" style="width:auto" ${S.soloPend?"checked":""}> Solo pendientes</label></div>
+  ${l.map(e=>{const p=plano(pos(e).planoId);return`<button class="it" data-eq="${e.id}"><span class="dot ${e.tipo}"></span><div class="grow"><b class="mono">${esc(e.numSerie||e.codigo||"Nuevo")}</b> <span class="note">${esc(e.numSerie?e.codigo:(e.codigo?"":"alta en la ronda"))}</span><div class="note">${esc(e.ubicacion||"")}${p?" · "+esc(p.nombre):""}${e.ultTrimestral?" · última "+fmt(e.ultTrimestral):""}</div></div>${chip(e)}</button>`}).join("")||`<p class="note">Nada que mostrar con este filtro.</p>`}
+  <button class="btn full" id="l-new" style="margin-top:4px">＋ ${t==="extintor"?"Extintor":t==="botiquin"?"Botiquín":"Pulsador"} que no está en la lista</button>
+  <div class="bar"><button class="btn t" id="l-env">📤 Enviar${se?` (${se} sin enviar)`:""}</button></div>`}
+function bLista(){$$("[data-tab]").forEach(b=>b.onclick=()=>{S.scroll[S.tab]=window.scrollY;S.tab=b.dataset.tab;lsSet("pcim.tab",S.tab);render()});
+  $$("[data-eq]").forEach(b=>b.onclick=()=>{S.scroll[S.tab]=window.scrollY;S.eq=b.dataset.eq;S.view="eq";render()});
+  $("#l-pl").onchange=e=>{S.fPlano=e.target.value;lsSet("pcim.fplano",S.fPlano);render()};$("#l-sp").onchange=e=>{S.soloPend=e.target.checked;lsSet("pcim.pend",S.soloPend);render()};
+  $("#l-new").onclick=async()=>{const id="nuevo-"+S.tab+"-"+Date.now();const v={nuevo:{tipo:S.tab,codigo:"",numSerie:"",ubicacion:"",agente:"",capacidad:"",planoId:S.fPlano&&S.fPlano!=="_"?S.fPlano:null,x:null,y:null},fotos:[],fila:null};await dbPut(id,v);S.items[id]=v;S.scroll[S.tab]=window.scrollY;S.eq=id;S.view="eq";render()};
+  $("#l-env").onclick=()=>{S.scroll[S.tab]=window.scrollY;S.view="enviar";render()}}
+
+/* ---- equipo ---- */
+const LB={senal:"Señalización",botella:"Estado botella",presion:"Presión manómetro",manguera:"Manguera / boquilla",estado:"Estado",contenido:"Contenido completo",accesible:"Accesible, visible y señalizado",tapa:"Tapa / cristal intacto"};
+const OP={SN:[["SI","Sí"],["NO","No"]],C:[["C","OK"],["NC","No conforme"]],PRES:[["C","OK · aguja en verde"],["L","OK · en el límite del verde"],["NC","No conforme · en rojo"],["NA","N/A (CO2, sin manómetro)"]]};
+let urls=[];
+const fotoTag=f=>f.tag||"Foto";
+function vEq(){const e=eqById(S.eq);if(!e){S.view="lista";return vLista()}const t=e.tipo,ext=t==="extintor",bot=t==="botiquin",pul=t==="pulsador";const it=S.items[e.id]||{fotos:[]};
+  S.cur={fila:JSON.parse(JSON.stringify(it.fila||filaDef(e))),fotos:(it.fotos||[]).slice(),pos:it.pos?{...it.pos}:null,nuevo:it.nuevo?{...it.nuevo}:null,guardado:!!it.guardado,picking:false};
+  const f=S.cur.fila;urls.forEach(u=>URL.revokeObjectURL(u));urls=S.cur.fotos.map(x=>URL.createObjectURL(x.b));
+  const cls=v=>v==="NC"||v==="NO"?"bad":v==="L"?"lim":"";
+  const sel=(k,o,l)=>`<label class="f">${l||LB[k]}<select data-f="${k}" class="${cls(f[k])}" ${f.noLoc||f.retirado?"disabled":""}>${o.map(([v,x])=>`<option value="${v}" ${f[k]===v?"selected":""}>${x}</option>`).join("")}</select></label>${defecto(k,f[k])}`;
+  const nv=S.cur.nuevo;
+  return`<button class="btn" id="e-back">← Lista</button>
+  <h2 style="margin-top:12px"><span class="dot ${t}" style="display:inline-block;margin-right:6px"></span><span class="mono">${esc(e.numSerie||e.codigo||"Nuevo")}</span> <span class="note">${esc(e.numSerie?e.codigo:(e.codigo?"":"alta en la ronda"))}</span></h2>
+  ${nv?`<div class="card"><b>Datos del equipo nuevo</b><label class="f" style="margin-top:8px">${pul?"Referencia / nº (si lo tiene)":"Nº de serie"}<input data-n="numSerie" value="${esc(nv.numSerie)}"></label><label class="f">Ubicación<input data-n="ubicacion" value="${esc(nv.ubicacion)}" placeholder="Nave, zona…"></label>${ext?`<div class="grid"><label class="f">Agente<input data-n="agente" value="${esc(nv.agente)}" placeholder="Polvo, CO2…"></label><label class="f">Capacidad<input data-n="capacidad" value="${esc(nv.capacidad)}" placeholder="6 kg"></label></div>`:""}<button class="btn sm" id="e-delnew">Quitar este equipo</button></div>`
+     :`<div class="note">${esc(e.ubicacion||"")}${ext?" · "+esc([e.agente,e.capacidad].filter(Boolean).join(" ")):""}${e.ultTrimestral?" · última revisión "+fmt(e.ultTrimestral):""}</div>`}
+  ${e.incidencia?`<div class="hint r" style="margin-top:10px"><b>Incidencia abierta:</b> ${esc(e.incidencia)}</div>`:""}
+  ${comprobar(e)?`<div class="hint" style="margin-top:10px"><b>Comprobar:</b> ${esc(comprobar(e))}</div>`:cargado(e)&&!S.cur.guardado?`<div class="hint g" style="margin-top:10px">Ya está revisado y cargado en la app. Solo hace falta tocarlo si quieres cambiar algo.</div>`:""}
+  <h3>Plano</h3><div id="e-plw">${vPlano(e)}</div>
+  <h3>Fotos</h3><div class="ph">${S.cur.fotos.map((x,i)=>`<figure><img src="${urls[i]}" alt="${esc(fotoTag(x))}"><figcaption>${esc(fotoTag(x))}</figcaption><button data-rm="${i}" aria-label="Quitar foto">✕</button></figure>`).join("")||`<span class="note">Sin fotos todavía.</span>`}</div>
+  <div class="row">${ext?`<label class="btn p" for="c1">📷 Tarjeta / placa</label><label class="btn p" for="c2">📷 Manómetro</label>`:`<label class="btn p" for="c1">📷 ${bot?"Botiquín":"Pulsador"}</label><label class="btn" for="c2">📷 Otra foto</label>`}<label class="btn" for="c3">Galería</label></div>
+  <input type="file" id="c1" accept="image/*" capture="environment" hidden><input type="file" id="c2" accept="image/*" capture="environment" hidden><input type="file" id="c3" accept="image/*" multiple hidden><input type="file" id="cd" accept="image/*" capture="environment" hidden>
+  <div class="note" id="e-st"></div>
+  <h3>Revisión</h3><div class="card">${ext?`<div class="grid">${sel("senal",OP.SN)+sel("botella",OP.C)}</div>${sel("presion",esCO2(e)?OP.PRES:OP.PRES.filter(o=>o[0]!=="NA"))+sel("manguera",OP.C)}`
+    :bot?`<div class="grid">${sel("senal",OP.C)+sel("estado",OP.C)}</div>${sel("contenido",OP.C)}<div class="grid"><label class="f">Falta (nºs)<input data-f="falta" value="${esc(f.falta)}" placeholder="4, 16"></label><label class="f">Caducado (nºs)<input data-f="cad" value="${esc(f.cad)}"></label></div>`
+    :PUL.map(([k,l])=>sel(k,OP.C,l)).join("")}
+  <label class="row" style="gap:6px;margin-bottom:10px"><input type="checkbox" id="e-nl" style="width:auto" ${f.noLoc||f.retirado?"checked":""}> ${bot?"Retirado":"No localizado"}</label>
+  <label class="f">Observaciones<input data-f="obs" value="${esc(f.obs)}"></label>
+  <label class="f">Fecha (solo si no es la de la ronda)<input type="date" data-f="fecha" value="${esc(f.fecha)}"></label>
+  ${S.cur.guardado?`<button class="btn sm" id="e-unrev">Quitar la revisión (dejar pendiente)</button>`:""}</div>
+  ${bot&&(DATA.botContenido||[]).length?`<details class="card"><summary style="cursor:pointer">Lista de contenido (nºs)</summary><ol style="margin:8px 0 0 18px;padding:0;font-size:14px">${DATA.botContenido.map(c=>`<li>${esc(c.nombre)} — ${esc(c.unidades)}${c.nota?` <span class="note">(${esc(c.nota)})</span>`:""}</li>`).join("")}</ol></details>`:""}
+  <div class="bar"><button class="btn" id="e-save">Guardar</button><button class="btn p" id="e-next">Guardar y siguiente</button></div>`}
+function defecto(k,v){if(v!=="NC"&&v!=="NO")return"";const n=S.cur.fotos.filter(x=>x.tag==="Defecto: "+LB[k]).length;
+  return`<div class="def">⚠ <label class="btn sm" data-def="${k}" style="color:var(--fire);border-color:var(--fire)">📷 Foto del defecto</label>${n?`<span>${n} foto${n>1?"s":""}</span>`:`<span>Sin foto</span>`}</div>`}
+function vPlano(e){const orig={planoId:e.planoId,x:e.x,y:e.y},cur=S.cur.pos||orig,pid=S.cur.pick||cur.planoId,p=plano(pid);
+  const sit=plano(cur.planoId)&&cur.x!=null;
+  const head=`<div class="note">${sit?`${esc(plano(cur.planoId).nombre)}${S.cur.pos?` · <b style="color:var(--alarm)">posición nueva</b>`:""}`:"Sin situar en el plano."}</div>`;
+  if(!S.cur.picking)return`${head}${sit?`<details style="margin:6px 0"><summary class="note" style="cursor:pointer">Ver dónde está</summary>${planoImg(plano(cur.planoId),cur,S.cur.pos&&orig.planoId===cur.planoId&&orig.x!=null?orig:null,false)}</details>`:""}
+    <div class="row" style="margin-top:6px"><button class="btn sm" id="e-sit">📍 ${sit?"Corregir posición":"Situar en el plano"}</button>${S.cur.pos?`<button class="btn sm" id="e-undo">Volver a la posición anterior</button>`:""}</div>`;
+  return`<div class="hint" style="margin:6px 0">Elige el plano y <b>toca el sitio exacto</b> del equipo. Puedes desplazar el plano con el dedo.</div>
+    <select id="e-pp" style="margin-bottom:8px">${DATA.planos.map(x=>`<option value="${x.id}" ${x.id===pid?"selected":""}>${esc(x.nombre)}</option>`).join("")}</select>
+    ${p?planoImg(p,cur.planoId===pid&&cur.x!=null?cur:null,null,true):""}<div class="row" style="margin-top:8px"><button class="btn sm" id="e-sitok">Hecho</button></div>`}
+function planoImg(p,mk,old,pick){return`<div class="plano" ${pick?'id="e-tap"':''}><div class="in"><img src="${p.src}" alt="Plano ${esc(p.nombre)}">${old?`<div class="mk old" style="left:${old.x*100}%;top:${old.y*100}%"></div>`:""}${mk?`<div class="mk" style="left:${mk.x*100}%;top:${mk.y*100}%"></div>`:""}</div></div>`}
+function centrar(box,m){if(!box||!m)return;requestAnimationFrame(()=>{box.scrollLeft=m.x*box.scrollWidth-box.clientWidth/2;box.scrollTop=m.y*box.scrollHeight-box.clientHeight/2})}
+function bPlano(e){const w=$("#e-plw");const re=()=>{w.innerHTML=vPlano(e);bPlano(e)};const orig={planoId:e.planoId,x:e.x,y:e.y};
+  const d=$("details",w);if(d)d.addEventListener("toggle",()=>centrar($(".plano",d),S.cur.pos||orig));
+  const s=$("#e-sit");if(s)s.onclick=()=>{S.cur.picking=true;S.cur.pick=(S.cur.pos||orig).planoId||(S.fPlano&&S.fPlano!=="_"?S.fPlano:DATA.planos[0].id);re();const c=S.cur.pos||orig;if(c.planoId===S.cur.pick)centrar($("#e-tap"),c)};
+  const u=$("#e-undo");if(u)u.onclick=async()=>{S.cur.pos=null;await guardar(false);re();toast("Posición anterior")};
+  const pp=$("#e-pp");if(pp)pp.onchange=()=>{S.cur.pick=pp.value;re()};
+  const tap=$("#e-tap");if(tap){let sx,sy,mv;tap.addEventListener("pointerdown",ev=>{sx=ev.clientX;sy=ev.clientY;mv=false});tap.addEventListener("pointermove",ev=>{if(Math.abs(ev.clientX-sx)+Math.abs(ev.clientY-sy)>10)mv=true});
+    tap.addEventListener("click",async ev=>{if(mv)return;const img=$("img",tap).getBoundingClientRect();const x=(ev.clientX-img.left)/img.width,y=(ev.clientY-img.top)/img.height;if(x<0||x>1||y<0||y>1)return;
+      const sl=tap.scrollLeft,st=tap.scrollTop;S.cur.pos={planoId:S.cur.pick,x:+x.toFixed(4),y:+y.toFixed(4)};await guardar(false);re();const t2=$("#e-tap");t2.scrollLeft=sl;t2.scrollTop=st;toast("Posición guardada")})}
+  const ok=$("#e-sitok");if(ok)ok.onclick=()=>{S.cur.picking=false;re()}}
+let defKey=null;
+function bEq(){const e=eqById(S.eq),t=e.tipo;bPlano(e);
+  $("#e-back").onclick=async()=>{if(S.cur.nuevo)await guardar(false);S.view="lista";render()};
+  $$("[data-f]").forEach(el=>el.addEventListener("change",()=>{S.cur.fila[el.dataset.f]=el.value.trim();if(el.tagName==="SELECT"){el.classList.toggle("bad",el.value==="NC"||el.value==="NO");el.classList.toggle("lim",el.value==="L");const nx=el.closest("label").nextElementSibling;if(nx&&nx.classList.contains("def"))nx.remove();el.closest("label").insertAdjacentHTML("afterend",defecto(el.dataset.f,el.value));bDef()}}));
+  $$("[data-n]").forEach(el=>el.addEventListener("change",async()=>{S.cur.nuevo[el.dataset.n]=el.value.trim();await guardar(false)}));
+  $("#e-nl").onchange=ev=>{S.cur.fila[t==="botiquin"?"retirado":"noLoc"]=ev.target.checked;$$("select[data-f]").forEach(s=>s.disabled=ev.target.checked)};
+  const dn=$("#e-delnew");if(dn)dn.onclick=async()=>{if(!confirm("¿Quitar este equipo nuevo y sus fotos?"))return;await dbDel(S.eq);delete S.items[S.eq];S.view="lista";render()};
+  const ur=$("#e-unrev");if(ur)ur.onclick=async()=>{S.cur.guardado=false;S.cur.fila=filaDef(e);await guardar(false);render();toast("Queda pendiente")};
+  $$("[data-rm]").forEach(b=>b.onclick=async()=>{if(!confirm("¿Quitar esta foto?"))return;S.cur.fotos.splice(+b.dataset.rm,1);await guardar(false);render()});
+  const tg={c1:t==="extintor"?"Tarjeta / placa":t==="botiquin"?"Botiquín":"Pulsador",c2:t==="extintor"?"Manómetro":"Estado",c3:"Estado"};
+  ["c1","c2","c3","cd"].forEach(i=>$("#"+i).onchange=async ev=>{const fs=[...ev.target.files];ev.target.value="";if(!fs.length)return;$("#e-st").textContent="Guardando foto…";
+    const tag=i==="cd"?"Defecto: "+LB[defKey]:tg[i];
+    for(const file of fs){try{S.cur.fotos.push({b:await reducir(file),tag,t:new Date().toISOString()})}catch(er){toast("No se pudo guardar una foto.")}}await guardar(false);render();toast("Foto guardada")});
+  bDef();
+  const sinFotoDef=()=>Object.entries(S.cur.fila).filter(([k,v])=>(v==="NC"||v==="NO")&&LB[k]&&!S.cur.fotos.some(x=>x.tag==="Defecto: "+LB[k])).map(([k])=>LB[k]);
+  const fin=async()=>{const sf=sinFotoDef();if(sf.length&&!confirm(`Falta la foto del defecto: ${sf.join(", ")}. ¿Guardar igualmente?`))return false;S.cur.guardado=true;await guardar(true);return true};
+  $("#e-save").onclick=async()=>{if(await fin()){S.view="lista";render()}};
+  $("#e-next").onclick=async()=>{if(!await fin())return;const l=eqsTipo(t),i=l.findIndex(x=>x.id===e.id);const sig=l.slice(i+1).find(x=>!done(x))||l.slice(0,i).find(x=>!done(x));if(sig){S.eq=sig.id;render()}else{S.view="lista";render();toast("Todos revisados en esta pestaña.")}}}
+function bDef(){$$("[data-def]").forEach(b=>b.onclick=()=>{defKey=b.dataset.def;$("#cd").click()})}
+let colaG=Promise.resolve();
+function guardar(aviso){const id=S.eq,cur=S.cur;colaG=colaG.then(async()=>{const v={fila:cur.fila,guardado:cur.guardado,fotos:cur.fotos.slice(),pos:cur.pos,hora:new Date().toISOString()};if(cur.nuevo)v.nuevo={...cur.nuevo};
+  await dbPut(id,v);S.items[id]=v;if(aviso)toast("Guardado")}).catch(()=>toast("No se pudo guardar."));return colaG}
+function reducir(file){return new Promise((ok,ko)=>{const u=URL.createObjectURL(file);const im=new Image();im.onload=()=>{const m=1600,k=Math.min(1,m/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?ok(b):ko(),"image/jpeg",.82)};im.onerror=()=>{URL.revokeObjectURL(u);ko()};im.src=u})}
+const b64=b=>new Promise(ok=>{const r=new FileReader();r.onload=()=>ok(r.result);r.readAsDataURL(b)});
+
+/* ---- enviar ---- */
+function vEnviar(){const r=S.ronda,its=Object.values(S.items).filter(v=>v.guardado||v.fotos.length||v.pos||v.nuevo),se=sinEnviar(),firma=lsGet("pcim.firma");
+  const pend=TIPOS.map(([t,x])=>`${eqsTipo(t).filter(e=>!done(e)).length} ${x.toLowerCase()}`).join(" · ");
+  return`<button class="btn" id="v-back">← Lista</button><h2 style="margin-top:12px">Enviar a PRL</h2>
+  <div class="kpis"><div class="kpi"><span>Equipos con algo hecho</span><b>${its.length}</b></div><div class="kpi"><span>Sin enviar</span><b style="color:${se?"var(--alarm)":"var(--ok)"}">${se}</b></div></div>
+  <p class="note">Pendientes de revisar: ${pend}.${S.enviado?` Último envío: ${hhmm(S.enviado)}.`:""}</p>
+  <div class="card"><b>Firma de quien revisa</b><p class="note" style="margin:4px 0 8px">${esc(r.realizadoPor)}. Firma con el dedo; se guarda para esta ronda.</p>
+  <canvas class="firma" id="v-firma"></canvas><div class="row" style="margin-top:8px"><button class="btn sm" id="v-borra">Borrar firma</button><span class="note" id="v-fst">${firma?"Firma guardada ✓":"Sin firma"}</span></div></div>
+  <div class="card"><button class="btn t full" id="v-json">📤 Enviar a PRL (archivo de la ronda)</button>
+  <p class="note" style="margin:6px 0 10px">Un solo archivo con casillas, fotos, posiciones, altas y firma. Se abre el menú del móvil para mandarlo por WhatsApp (como Documento), correo o Teams.</p>
+  <button class="btn full" id="v-pdf">📄 PDF de evidencia</button>
+  <p class="note" style="margin:6px 0 0">Resumen de la ronda con cada equipo, sus fotos y la firma.</p><div class="note" id="v-st" style="margin-top:8px"></div></div>
+  <h3>Ronda terminada</h3><div class="card"><p class="note" style="margin-top:0">Cuando PRL confirme que ha recibido el archivo, puedes borrar la ronda del móvil para empezar la siguiente. Los datos (inventario y planos) se quedan.</p>
+  <button class="btn full" id="v-del">Borrar esta ronda del móvil</button></div>`}
+function bEnviar(){$("#v-back").onclick=()=>{S.view="lista";render()};
+  const cv=$("#v-firma"),ctx=cv.getContext("2d");const fit=()=>{const r=cv.getBoundingClientRect();cv.width=r.width*2;cv.height=r.height*2;ctx.scale(2,2);ctx.lineWidth=2.2;ctx.lineCap="round";ctx.strokeStyle="#111";const f=lsGet("pcim.firma");if(f){const im=new Image();im.onload=()=>ctx.drawImage(im,0,0,r.width,r.height);im.src=f}};fit();
+  let dib=false,last=null,cambio=false;const pt=ev=>{const r=cv.getBoundingClientRect();return[ev.clientX-r.left,ev.clientY-r.top]};
+  cv.addEventListener("pointerdown",ev=>{dib=true;last=pt(ev);cv.setPointerCapture(ev.pointerId)});
+  cv.addEventListener("pointermove",ev=>{if(!dib)return;const p=pt(ev);ctx.beginPath();ctx.moveTo(...last);ctx.lineTo(...p);ctx.stroke();last=p;cambio=true});
+  const fin=()=>{if(!dib)return;dib=false;if(cambio){lsSet("pcim.firma",cv.toDataURL("image/png"));$("#v-fst").textContent="Firma guardada ✓"}};cv.addEventListener("pointerup",fin);cv.addEventListener("pointercancel",fin);
+  $("#v-borra").onclick=()=>{ctx.clearRect(0,0,cv.width,cv.height);localStorage.removeItem("pcim.firma");$("#v-fst").textContent="Sin firma"};
+  $("#v-json").onclick=enviarJSON;$("#v-pdf").onclick=pdf;
+  $("#v-del").onclick=async()=>{if(sinEnviar()&&!confirm("Hay cambios SIN ENVIAR. ¿Borrar igualmente?"))return;if(!confirm("Se borra del móvil todo lo de esta ronda (fotos, casillas, posiciones, altas y firma). ¿Seguir?"))return;
+    await dbClear();S.items={};S.ronda=null;S.enviado=null;["pcim.ronda","pcim.enviado","pcim.firma"].forEach(k=>localStorage.removeItem(k));S.view="lista";render()}}
+async function compartir(file,st){const mb=(file.size/1048576).toFixed(1);
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:file.name});st.textContent=`Compartido «${file.name}» (${mb} MB).`;return true}}catch(er){if(er&&er.name==="AbortError"){st.textContent="Cancelado.";return false}}
+  const a=document.createElement("a");a.href=URL.createObjectURL(file);a.download=file.name;document.body.appendChild(a);a.click();a.remove();st.textContent=`Descargado «${file.name}» (${mb} MB) en Descargas.`;return true}
+const nombreBase=()=>{const r=S.ronda;return`ronda-pci_${r.anio}-${r.periodo}_${r.fecha}`};
+async function enviarJSON(){const st=$("#v-st");st.textContent="Preparando archivo…";const r=S.ronda,out=[];
+  for(const e of todos()){const it=S.items[e.id];if(!it)continue;if(!it.guardado&&!it.fotos.length&&!it.pos&&!it.nuevo)continue;const fotos=[];for(const x of it.fotos)fotos.push({data:await b64(x.b),tag:x.tag||"",hora:x.t||""});
+    out.push({eqId:e.id,tipo:e.tipo,codigo:e.codigo||"",numSerie:e.numSerie||"",revisado:!!it.guardado,fila:it.guardado?it.fila:null,pos:it.pos||null,nuevo:it.nuevo||null,hora:it.hora,fotos})}
+  if(!out.length){st.textContent="Todavía no has guardado nada.";return}
+  const pend={};TIPOS.forEach(([t])=>pend[t]=eqsTipo(t).filter(e=>!done(e)).map(e=>e.codigo||e.id));
+  const ahora=new Date().toISOString();
+  const doc={formato:"ronda-pci-movil",version:3,programa:PROG,datosDel:DATA.fecha,exportado:ahora,ronda:r,firma:lsGet("pcim.firma")||null,pendientes:pend,items:out};
+  const file=new File([JSON.stringify(doc)],nombreBase()+".json",{type:"application/json"});
+  if(await compartir(file,st)){S.enviado=ahora;lsSet("pcim.enviado",ahora)}}
+async function pdf(){const st=$("#v-st");if(!window.jspdf){st.textContent="No se pudo cargar el generador de PDF.";return}st.textContent="Preparando PDF…";
+  const{jsPDF}=window.jspdf,d=new jsPDF({unit:"mm",format:"a4"}),r=S.ronda,W=210,M=14;let y=M;
+  const per=PER.find(x=>x[0]===r.periodo)?.[1]||r.periodo;
+  const linea=(t,sz=10,b=false)=>{d.setFont("helvetica",b?"bold":"normal");d.setFontSize(sz);if(sz>11)y+=sz*.2;const ls=d.splitTextToSize(String(t),W-2*M);ls.forEach(l=>{if(y>285){d.addPage();y=M}d.text(l,M,y);y+=sz*.45})};
+  linea("MILSA TRILLO GALICIA, S.A. · Departamento de PRL",9);linea(`Ronda PCI · ${per} ${r.anio}`,16,true);y+=2;
+  linea(`Fecha: ${fmt(r.fecha)} · Realizado por: ${r.realizadoPor} · Datos del ${DATA.fecha} · Programa v${PROG}`,9);y+=3;
+  const TX={C:"OK",L:"OK (límite del verde)",NC:"NO CONFORME",NA:"N/A",SI:"Sí",NO:"No","":"No comprobado"};
+  const its=todos().filter(e=>S.items[e.id]&&(S.items[e.id].guardado||S.items[e.id].fotos.length||S.items[e.id].pos||S.items[e.id].nuevo));
+  for(const e of its){const it=S.items[e.id],f=it.guardado?it.fila:null;if(y>250){d.addPage();y=M}
+    d.setDrawColor(200);d.line(M,y,W-M,y);y+=5;
+    linea(`${e.codigo||"Alta nueva"} · ${e.numSerie||"s/n"} · ${e.ubicacion||""}${e.nuevoEnRonda?" (alta en la ronda)":""}`,11,true);
+    if(f){const res=malo(f)?"NO CONFORME":"CONFORME";linea(`Resultado: ${res}${f.fecha?` · fecha ${fmt(f.fecha)}`:""}`,10,true);
+      const ks=Object.keys(f).filter(k=>LB[k]);linea(ks.map(k=>`${LB[k]}: ${TX[f[k]]??f[k]}`).join(" · "),9);
+      if(f.noLoc)linea("No localizado",9,true);if(f.retirado)linea("Retirado",9,true);if(f.falta)linea("Falta: "+f.falta,9);if(f.cad)linea("Caducado: "+f.cad,9);if(f.obs)linea("Observaciones: "+f.obs,9)}
+    else linea("Sin revisión guardada (solo fotos o posición).",9);
+    if(it.pos){const p=plano(it.pos.planoId);linea(`Posición nueva en el plano: ${p?p.nombre:it.pos.planoId}`,9)}
+    let x=M,h=0;for(const ph of it.fotos){const im=await b64(ph.b);const dim=await new Promise(ok=>{const i=new Image();i.onload=()=>ok([i.width,i.height]);i.src=im});
+      const w=55,hh=Math.min(70,w*dim[1]/dim[0]);if(x+w>W-M){x=M;y+=h+8;h=0}if(y+hh>282){d.addPage();y=M;x=M;h=0}
+      d.addImage(im,"JPEG",x,y+1,w,hh);d.setFontSize(7);d.setFont("helvetica","normal");d.text(`${ph.tag||"Foto"} · ${hhmm(ph.t)}`,x,y+hh+4);x+=w+4;h=Math.max(h,hh)}
+    if(it.fotos.length)y+=h+9}
+  if(y>240){d.addPage();y=M}y+=4;linea("Firma de quien revisa: "+r.realizadoPor,10,true);const fi=lsGet("pcim.firma");if(fi){d.addImage(fi,"PNG",M,y,70,28);y+=30}else linea("(sin firma)",9);
+  const file=new File([d.output("blob")],nombreBase()+".pdf",{type:"application/pdf"});await compartir(file,st)}
+
+window.addEventListener("beforeunload",ev=>{if(DATA&&sinEnviar()){ev.preventDefault();ev.returnValue=""}});
+if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+openDB().then(async()=>{const d=await getAll("datos");DATA=d.actual||null;const all=await getAll("items");
+  // fotos guardadas como Blob suelto (formato antiguo) → {b,tag,t}
+  for(const v of Object.values(all))if(v.fotos)v.fotos=v.fotos.map(x=>x instanceof Blob?{b:x,tag:"",t:""}:x);
+  S.items=all;render()}).catch(()=>{$("#app").innerHTML=`<div class="hint">Este navegador no deja guardar datos. Ábrelo con Chrome o Safari (no en modo incógnito).</div>`});
+</script></body></html>
